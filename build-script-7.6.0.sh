@@ -4,11 +4,11 @@ set -u
 set -e
 
 # Bonita BPM version
-BONITA_BPM_VERSION=7.4.1
+BONITA_BPM_VERSION=7.6.0
 
-# Check that Maven 3.3.9 is available
+# Check that Maven 3.5.2 is available
 MAVEN_VERSION="$(mvn --version 2>&1 | awk -F " " 'NR==1 {print $3}')"
-if [ "$MAVEN_VERSION" != "3.3.9" ]; then
+if [ "$MAVEN_VERSION" != "3.5.2" ]; then
   echo Incorrect Maven version "$MAVEN_VERSION"
   exit 1
 fi
@@ -68,7 +68,7 @@ mvn clean install -Dmaven.test.skip=true -f bonita-connectors/pom.xml
 
 # Each connectors implementation version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/bundles/plugins/org.bonitasoft.studio.connectors/pom.xml. You need to find connector git repository tag that provides a given connector implementation version.
 
-git clone --branch 2.0.0 --single-branch https://github.com/bonitasoft/bonita-connector-alfresco.git
+git clone --branch 2.0.1 --single-branch https://github.com/bonitasoft/bonita-connector-alfresco.git
 mvn clean install -Dmaven.test.skip=true -Dbonita.engine.version=$BONITA_BPM_VERSION -f bonita-connector-alfresco/pom.xml
 
 git clone --branch 3.0.1 --single-branch https://github.com/bonitasoft/bonita-connector-cmis.git
@@ -127,7 +127,7 @@ mvn clean install -Dmaven.test.skip=true -Dbonita.engine.version=$BONITA_BPM_VER
 git clone --branch 1.1.0-pomfixed --single-branch https://github.com/bonitasoft/bonita-connector-twitter.git
 mvn clean install -Dmaven.test.skip=true -Dbonita.engine.version=$BONITA_BPM_VERSION -f bonita-connector-twitter/pom.xml
 
-git clone --branch 1.0.13 --single-branch https://github.com/bonitasoft/bonita-connector-webservice.git
+git clone --branch 1.1.10 --single-branch https://github.com/bonitasoft/bonita-connector-webservice.git
 mvn clean install -Dmaven.test.skip=true -Dbonita.engine.version=$BONITA_BPM_VERSION -f bonita-connector-webservice/pom.xml
 
 # Version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/pom.xml.
@@ -151,14 +151,14 @@ mvn clean install -Dmaven.test.skip=true -f bonita-portal-js/pom.xml
 
 # Version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/pom.xml
 # FIXME: allow to skip compilation of test. Currently 'npm run test' is executed even if -Dmaven.test.skip=true option is provided.
-git clone --branch 1.4.26 --single-branch https://github.com/bonitasoft/bonita-ui-designer.git
+git clone --branch 1.6.32 --single-branch https://github.com/bonitasoft/bonita-ui-designer.git
 mvn clean install -DskipTests -f bonita-ui-designer/pom.xml
 
 git clone --branch $BONITA_BPM_VERSION --single-branch https://github.com/bonitasoft/bonita-distrib.git
 mvn clean install -Dmaven.test.skip=true -Dwildfly.zip.parent.folder=$AS_DIR_PATH -Dtomcat.zip.parent.folder=$AS_DIR_PATH -f bonita-distrib/pom.xml
 
 # Version is defined in https://github.com/bonitasoft/bonita-studio/blob/$BONITA_BPM_VERSION/pom.xml
-git clone --branch image-overlay-plugin-1.0.2 --single-branch https://github.com/bonitasoft/image-overlay-plugin.git
+git clone --branch image-overlay-plugin-1.0.3 --single-branch https://github.com/bonitasoft/image-overlay-plugin.git
 mvn clean install -Dmaven.test.skip=true -f image-overlay-plugin/pom.xml
 
 git clone --branch $BONITA_BPM_VERSION --single-branch https://github.com/bonitasoft/bonita-studio.git
@@ -166,4 +166,4 @@ git clone --branch $BONITA_BPM_VERSION --single-branch https://github.com/bonita
 rm bonita-studio/bundles/plugins/org.bonitasoft.studio.importer.bar/src/org/bonitasoft/studio/importer/bar/custom/migration/connector/mapper/SapConnectorMapper.java
 printf "You need to edit bonita-studio/bundles/plugins/org.bonitasoft.studio.connectors/pom.xml line 331 to remove bonita-connector-sap-jco2-impl dependency.\nYou need to edit bonita-studio/bundles/plugins/org.bonitasoft.studio.importer.bar/plugin.xml line 71 to remove SAP connector definition mapper.\nPress any key to continue..."
 read -n 1
-mvn clean verify -Dmaven.test.skip=true -f bonita-studio/pom.xml -Pmirrored,generate -Dp2MirrorUrl=http://update-site.bonitasoft.com/p2/7.2
+mvn clean verify -Dmaven.test.skip=true -f bonita-studio/pom.xml -Pmirrored,generate -Dp2MirrorUrl=http://update-site.bonitasoft.com/p2/7.6/
